@@ -28,26 +28,11 @@ app.use(helmet({
 
 // CORS configuration
 app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      process.env.BACKEND_URL,
-      process.env.FRONTEND_URL,
-      'http://localhost:3000',
-      'http://localhost:3001'
-    ];
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow all origins temporarily
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
-// Handle preflight OPTIONS requests
-app.options('*', cors());
 
 // Rate limiting
 const limiter = rateLimit({
