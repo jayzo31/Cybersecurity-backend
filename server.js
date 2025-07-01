@@ -20,7 +20,7 @@ const logger = require('./utils/logger');
 const db = require('./config/database');
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT;
 
 // Security middleware
 app.use(helmet({
@@ -104,7 +104,6 @@ process.on('SIGINT', () => {
 
 // Start server
 if (require.main === module) {
-  console.log('Attempting to start server on port:', PORT);
   db.initializeDatabase()
     .then(() => {
       app.listen(PORT, '0.0.0.0', () => {
