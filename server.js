@@ -16,9 +16,10 @@ const healthRoute = require('./routes/health');
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
 const logger = require('./utils/logger');
+const db = require('./config/database');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 // Security middleware
 app.use(helmet({
@@ -27,7 +28,10 @@ app.use(helmet({
 }));
 
 // CORS configuration
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -99,11 +103,19 @@ process.on('SIGINT', () => {
 
 // Start server
 if (require.main === module) {
-  app.listen(PORT, '0.0.0.0', () => {
-    logger.info(`🚀 Server running on port ${PORT}`);
-    logger.info(`📚 API Documentation available at http://localhost:${PORT}/`);
-    logger.info(`🔥 Environment: ${process.env.NODE_ENV || 'development'}`);
-  });
+  console.log('Attempting to start server on port:', PORT);
+  db.initializeDatabase()
+    .then(() => {
+      app.listen(PORT, '0.0.0.0', () => {
+        logger.info(`🚀 Server running on port ${PORT}`);
+        logger.info(`📚 API Documentation available at http://localhost:${PORT}/`);
+        logger.info(`🔥 Environment: ${process.env.NODE_ENV || 'development'}`);
+      });
+    })
+    .catch((error) => {
+      logger.error('Failed to initialize database and start server:', error);
+      process.exit(1);
+    });
 }
 
 module.exports = app;

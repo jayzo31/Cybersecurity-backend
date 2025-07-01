@@ -32,9 +32,10 @@ router.post('/register', registerValidation, async (req, res) => {
     }
 
     const { email, password, name } = req.body;
+    const lowercasedEmail = email.toLowerCase();
 
     // Check if user already exists
-    const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+    const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [lowercasedEmail]);
     if (existingUser.rows.length > 0) {
       return res.status(409).json({
         error: 'User already exists',
