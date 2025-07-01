@@ -106,7 +106,7 @@ process.on('SIGINT', () => {
 if (require.main === module) {
   db.initializeDatabase()
     .then(() => {
-      app.listen(PORT, '0.0.0.0', () => {
+      app.listen(PORT, () => {
         logger.info(`🚀 Server running on port ${PORT}`);
         logger.info(`📚 API Documentation available at http://localhost:${PORT}/`);
         logger.info(`🔥 Environment: ${process.env.NODE_ENV || 'development'}`);
