@@ -6,6 +6,7 @@ const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 require('dotenv').config();
+console.log('Railway PORT environment variable:', process.env.PORT);
 
 // Import routes
 const authRoutes = require('./routes/auth');
